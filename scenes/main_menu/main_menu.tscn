@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://ddl7pd4htuflp"]
+
+[ext_resource type="Script" uid="uid://dhtufbqxx43fe" path="res://scenes/main_menu/main_menu.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://bgcrdckti16d" path="res://resources/themes/default_theme.tres" id="2_theme"]
+
+[node name="MainMenu" type="Control" unique_id=1762805624]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="." unique_id=2041860811]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.059, 0.098, 0.137, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=660655259]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=2078595342]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=300014763]
+layout_mode = 2
+theme_type_variation = &"LabelTitle"
+text = "BASE PROTOTYPE"
+horizontal_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=354895780]
+layout_mode = 2
+theme_type_variation = &"LabelSubtitle"
+text = "Plantilla Educativa — Godot 4.6"
+horizontal_alignment = 1
+
+[node name="Separator" type="HSeparator" parent="CenterContainer/VBoxContainer" unique_id=1483043546]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="ButtonContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=2142209933]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="PlayButton" type="Button" parent="CenterContainer/VBoxContainer/ButtonContainer" unique_id=1686041265]
+custom_minimum_size = Vector2(280, 50)
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_type_variation = &"ButtonPrimary"
+text = "JUGAR"
+
+[node name="OptionsButton" type="Button" parent="CenterContainer/VBoxContainer/ButtonContainer" unique_id=803295407]
+custom_minimum_size = Vector2(280, 50)
+layout_mode = 2
+theme_type_variation = &"ButtonSecondary"
+text = "OPCIONES"
+
+[node name="QuitButton" type="Button" parent="CenterContainer/VBoxContainer/ButtonContainer" unique_id=1183247339]
+custom_minimum_size = Vector2(280, 50)
+layout_mode = 2
+theme_type_variation = &"ButtonDanger"
+text = "SALIR"
+
+[node name="FooterLabel" type="Label" parent="." unique_id=1351733484]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -30.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_type_variation = &"LabelFooter"
+text = "v1.0 — Ejemplo educativo para estudiantes"
+horizontal_alignment = 1

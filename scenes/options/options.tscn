@@ -1,0 +1,107 @@
+[gd_scene format=3 uid="uid://bamycpj16vrrj"]
+
+[ext_resource type="Script" uid="uid://hj88q5qpyu0v" path="res://scenes/options/options.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://bgcrdckti16d" path="res://resources/themes/default_theme.tres" id="2_theme"]
+
+[node name="Options" type="Control" unique_id=862826154]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="." unique_id=827550450]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.059, 0.098, 0.137, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1935748468]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1522537704]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1107561093]
+layout_mode = 2
+theme_type_variation = &"LabelTitleAlt"
+text = "OPCIONES"
+horizontal_alignment = 1
+
+[node name="MusicContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=1569083391]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="MusicLabel" type="Label" parent="CenterContainer/VBoxContainer/MusicContainer" unique_id=679990882]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+theme_type_variation = &"LabelBody"
+text = "Volumen Música"
+
+[node name="MusicSlider" type="HSlider" parent="CenterContainer/VBoxContainer/MusicContainer" unique_id=134630615]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+value = 80.0
+
+[node name="SfxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=1054716756]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="SfxLabel" type="Label" parent="CenterContainer/VBoxContainer/SfxContainer" unique_id=353957527]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+theme_type_variation = &"LabelBody"
+text = "Volumen SFX"
+
+[node name="SfxSlider" type="HSlider" parent="CenterContainer/VBoxContainer/SfxContainer" unique_id=104550244]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+value = 80.0
+
+[node name="FullscreenContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=1346743822]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="FullscreenLabel" type="Label" parent="CenterContainer/VBoxContainer/FullscreenContainer" unique_id=558607221]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+theme_type_variation = &"LabelBody"
+text = "Pantalla Completa"
+
+[node name="FullscreenToggle" type="CheckButton" parent="CenterContainer/VBoxContainer/FullscreenContainer" unique_id=821038683]
+layout_mode = 2
+
+[node name="BackSeparator" type="HSeparator" parent="CenterContainer/VBoxContainer" unique_id=1755542402]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="BackButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1230766939]
+custom_minimum_size = Vector2(280, 50)
+layout_mode = 2
+theme_type_variation = &"ButtonBack"
+text = "← VOLVER"
+
+[node name="FooterLabel" type="Label" parent="." unique_id=324191502]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -30.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_type_variation = &"LabelFooter"
+text = "Presiona ESC para volver"
+horizontal_alignment = 1
