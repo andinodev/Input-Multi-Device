@@ -31,7 +31,19 @@ func _physics_process(delta):
 		if InputMultiDevice.is_action_just_pressed(player_id, "move_up"):
 			velocity.y = JUMP_VELOCITY
 
+	var was_on_floor = is_on_floor()
+
 	move_and_slide()
+
+	if not was_on_floor and is_on_floor():
+		# Vibración fuerte al aterrizar por 2 segundos
+		InputMultiDevice.start_vibration(player_id, 0.5, 1.0, 2.0)
+
+	# Test de Toggle Action: Agacharse ("crouch")
+	if InputMultiDevice.is_action_toggled(player_id, "crouch"):
+		scale.y = 0.5
+	else:
+		scale.y = 1.0
 
 	# Mostrar el input presionado en el Label superior
 	if has_node("InputLabel") and has_node("/root/InputMultiDevice"):
@@ -57,5 +69,6 @@ func _physics_process(delta):
 		if InputMultiDevice.is_action_pressed(player_id, "move_down"): inputs_pressed.append("DOWN " + get_key_str.call("move_down"))
 		if InputMultiDevice.is_action_pressed(player_id, "move_left"): inputs_pressed.append("LEFT " + get_key_str.call("move_left"))
 		if InputMultiDevice.is_action_pressed(player_id, "move_right"): inputs_pressed.append("RIGHT " + get_key_str.call("move_right"))
+		if InputMultiDevice.is_action_toggled(player_id, "crouch"): inputs_pressed.append("[STATE: CROUCHING]")
 		
 		$InputLabel.text = " ".join(inputs_pressed)

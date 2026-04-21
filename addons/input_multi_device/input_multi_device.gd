@@ -21,9 +21,14 @@ var default_joy_btns: Array = [JOY_BUTTON_X, JOY_BUTTON_A, JOY_BUTTON_B, JOY_BUT
 var connected_devices: Array = []
 var player_to_device: Dictionary = {} # player_id: int -> device_id: int
 
-# Perfiles de jugadores (para remapeo dinámico)
-# Estructura: profile[player_id][action_name] = InputEvent
 var player_profiles: Dictionary = {}
+
+# Banco de Perfiles Nombrados (CRUD para Opciones)
+# profile_name: String -> Dictionary { action: InputEvent }
+var custom_profiles: Dictionary = {}
+
+var toggle_states: Dictionary = {} # player_id: int -> Dictionary de {action: bool}
+var global_base_deadzone: float = 0.2
 
 func _ready() -> void:
 	Input.joy_connection_changed.connect(_on_joy_connection_changed)
@@ -68,12 +73,22 @@ func setup_player_device(player_id: int, device_id: int) -> void:
 	
 	# Asegurarnos que existe un perfil vacio o cargarlo
 	if not player_profiles.has(player_id):
-		_generate_default_profile(player_id, device_id)
+		player_profiles[player_id] = get_default_profile(device_id)
+	else:
+		# Si ya hay un perfil (p.ej. cargado de disco o asignado), sincronizamos el dispositivo
+		_sync_profile_device(player_id, device_id)
 		
 	_apply_profile_to_inputmap(player_id)
 
-## Genera un perfil por defecto basado en si es mando o teclado virtual
-func _generate_default_profile(player_id: int, device_id: int) -> void:
+func _sync_profile_device(player_id: int, target_device: int) -> void:
+	if not player_profiles.has(player_id): return
+	for action in player_profiles[player_id]:
+		var event = player_profiles[player_id][action]
+		if event != null and (event is InputEventJoypadButton or event is InputEventJoypadMotion):
+			event.device = target_device
+
+## Genera un perfil base dependiendo del tipo de dispositivo
+func get_default_profile(device_type: int) -> Dictionary:
 	var profile = {}
 	var all_actions = movement_actions + generic_actions
 	
@@ -81,21 +96,19 @@ func _generate_default_profile(player_id: int, device_id: int) -> void:
 		var event: InputEvent = null
 		
 		# MANDOS (Device >= 0)
-		if device_id >= 0:
-			event = _get_default_joy_event(action, device_id)
-			
+		if device_type >= 0:
+			event = _get_default_joy_event(action, device_type)
 		# TECLADO 1 (WASD) 
-		elif device_id == -1:
+		elif device_type == -1:
 			event = _get_default_kb1_event(action)
-			
 		# TECLADO 2 (FLECHAS)
-		elif device_id == -3:
+		elif device_type == -3:
 			event = _get_default_kb2_event(action)
 			
 		if event:
 			profile[action] = event
 			
-	player_profiles[player_id] = profile
+	return profile
 
 func _get_default_joy_event(action: String, device_id: int) -> InputEvent:
 	# -- MOVIMIENTO (D-PAD O STICK) --
@@ -153,7 +166,7 @@ func _get_default_kb2_event(action: String) -> InputEventKey:
 			key_event.physical_keycode = default_kb2_keys[action_idx]
 	return key_event
 
-## 3. Remapeo Dinámico
+## 3. Remapeo Dinámico para un Jugador Activo
 func remap_action(player_id: int, action_name: String, new_event: InputEvent) -> void:
 	if not player_profiles.has(player_id):
 		player_profiles[player_id] = {}
@@ -164,6 +177,34 @@ func remap_action(player_id: int, action_name: String, new_event: InputEvent) ->
 		
 	player_profiles[player_id][action_name] = new_event
 	_apply_profile_to_inputmap(player_id)
+
+## 3.1. CRUD de Perfiles Nombrados (Para la UI de Opciones)
+func create_custom_profile(profile_name: String, base_device_type: int) -> void:
+	custom_profiles[profile_name] = get_default_profile(base_device_type)
+
+func delete_custom_profile(profile_name: String) -> void:
+	if custom_profiles.has(profile_name):
+		custom_profiles.erase(profile_name)
+
+func remap_custom_profile(profile_name: String, action_name: String, new_event: InputEvent) -> void:
+	if not custom_profiles.has(profile_name): return
+	custom_profiles[profile_name][action_name] = new_event
+
+func apply_custom_profile_to_player(player_id: int, profile_name: String) -> void:
+	if not custom_profiles.has(profile_name): return
+	
+	# Copiamos profundamente los eventos para que los dispositivos no compartan referencias
+	var new_profile = {}
+	for action in custom_profiles[profile_name]:
+		if custom_profiles[profile_name][action] != null:
+			new_profile[action] = custom_profiles[profile_name][action].duplicate()
+			
+	player_profiles[player_id] = new_profile
+	var current_device = player_to_device.get(player_id, -1)
+	if current_device != -1:
+		_sync_profile_device(player_id, current_device)
+	_apply_profile_to_inputmap(player_id)
+
 
 ## Aplica el perfil guardado en memoria al InputMap de Godot
 func _apply_profile_to_inputmap(player_id: int) -> void:
@@ -193,7 +234,15 @@ func _apply_profile_to_inputmap(player_id: int) -> void:
 				axis_event.axis = JOY_AXIS_LEFT_X if (idx == 1 or idx == 3) else JOY_AXIS_LEFT_Y
 				axis_event.axis_value = 1.0 if (idx == 1 or idx == 2) else -1.0 # Right(1), Down(2)
 				InputMap.action_add_event(system_action_name, axis_event)
+				
+		# Aplicar Deadzone a la acción generada
+		InputMap.action_set_deadzone(system_action_name, global_base_deadzone)
 
+
+func set_global_deadzone(deadzone: float) -> void:
+	global_base_deadzone = clamp(deadzone, 0.0, 1.0)
+	for player_id in player_profiles:
+		_apply_profile_to_inputmap(player_id)
 
 func _get_system_action_name(player_id: int, base_action: String) -> String:
 	return "p%d_%s" % [player_id, base_action]
@@ -216,6 +265,10 @@ func is_action_just_released(player_id: int, action: String) -> bool:
 	if InputMap.has_action(system_action_name):
 		return Input.is_action_just_released(system_action_name)
 	return false
+
+func is_action_toggled(player_id: int, action: String) -> bool:
+	if not toggle_states.has(player_id): return false
+	return toggle_states[player_id].get(action, false)
 
 func get_axis(player_id: int, negative_action: String, positive_action: String) -> float:
 	var sys_neg = _get_system_action_name(player_id, negative_action)
@@ -252,14 +305,62 @@ func _setup_lobby_global_actions() -> void:
 		btn_start.button_index = JOY_BUTTON_START
 		InputMap.action_add_event(action, btn_start)
 		
-	# Teclado global
+	# Teclado global principal (Teclado 1)
 	var kb_enter = InputEventKey.new()
 	kb_enter.physical_keycode = KEY_ENTER
 	InputMap.action_add_event(action, kb_enter)
+	
+	# Teclado global Numpad (Teclado 2)
+	var kb_np_enter = InputEventKey.new()
+	kb_np_enter.physical_keycode = KEY_KP_ENTER
+	InputMap.action_add_event(action, kb_np_enter)
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("lobby_universal_join"):
 		if event is InputEventJoypadButton:
 			player_joined_lobby.emit(event.device)
 		elif event is InputEventKey:
-			player_joined_lobby.emit(-1) # Teclado 1 asume unirte
+			if event.physical_keycode == KEY_KP_ENTER:
+				player_joined_lobby.emit(-3) # Teclado 2
+			else:
+				player_joined_lobby.emit(-1) # Teclado 1 asume unirte
+
+	# Gestion de Toggle States de forma eficiente
+	if event.is_pressed() and not event.is_echo():
+		for player_id in player_profiles:
+			var all_actions = movement_actions + generic_actions
+			for action in all_actions:
+				var sys_action = _get_system_action_name(player_id, action)
+				if event.is_action(sys_action):
+					if not toggle_states.has(player_id): toggle_states[player_id] = {}
+					var current = toggle_states[player_id].get(action, false)
+					toggle_states[player_id][action] = not current
+
+## 6. Funcionalidades Extra (Vibración y Persistencia)
+func start_vibration(player_id: int, weak_motor: float, strong_motor: float, duration: float = 0.0) -> void:
+	var device_id = player_to_device.get(player_id, -1)
+	# Silencia silenciosamente si el device es menor a 0 (Teclados)
+	if device_id >= 0:
+		Input.start_joy_vibration(device_id, weak_motor, strong_motor, duration)
+
+func stop_vibration(player_id: int) -> void:
+	var device_id = player_to_device.get(player_id, -1)
+	if device_id >= 0:
+		Input.stop_joy_vibration(device_id)
+
+func save_profiles(file_path: String = "user://input_profiles.cfg") -> void:
+	InputMultiDevicePersistence.save_to_disk(custom_profiles, file_path)
+
+func load_profiles(file_path: String = "user://input_profiles.cfg") -> void:
+	var loaded = InputMultiDevicePersistence.load_from_disk(file_path)
+	if loaded.size() > 0:
+		for profile_name in loaded:
+			custom_profiles[profile_name] = loaded[profile_name]
+			
+	_ensure_default_profiles_exist()
+
+func _ensure_default_profiles_exist() -> void:
+	if not custom_profiles.has("Default_Mando"): custom_profiles["Default_Mando"] = get_default_profile(0)
+	if not custom_profiles.has("Default_Teclado_1"): custom_profiles["Default_Teclado_1"] = get_default_profile(-1)
+	if not custom_profiles.has("Default_Teclado_2"): custom_profiles["Default_Teclado_2"] = get_default_profile(-3)
+

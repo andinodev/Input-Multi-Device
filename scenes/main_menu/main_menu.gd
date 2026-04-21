@@ -24,6 +24,7 @@ extends Control
 ## Using constants makes it easy to find and change paths in one place.
 const GAMEPLAY_SCENE := "res://scenes/gameplay/gameplay.tscn"
 const OPTIONS_SCENE := "res://scenes/options/options.tscn"
+const LOBBY_SCENE := "res://scenes/lobby/lobby.tscn"
 
 
 # ── Node References ──────────────────────────────────────────────────────────
@@ -43,7 +44,7 @@ func _ready() -> void:
 # ── Button Handlers ──────────────────────────────────────────────────────────
 
 func _on_play_pressed() -> void:
-	SceneManager.change_scene(GAMEPLAY_SCENE)
+	SceneManager.change_scene(LOBBY_SCENE)
 
 
 func _on_options_pressed() -> void:

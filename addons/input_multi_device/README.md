@@ -1,4 +1,4 @@
-# InputMultiDevice Plugin para Godot 4
+# InputMultiDevice Plugin para Godot 4.x
 
 Este plugin permite a los desarrolladores gestionar ágilmente las entradas físicas (Inputs) para partidas multijugador local en un mismo PC, ya sean juegos de plataforma cooperativos, de mesa, o de peleas.
 
@@ -45,21 +45,26 @@ func _ready():
 
 ---
 
-## 2. Asignando Controladores
+## 2. Asignando Controladores y Perfiles
 
-Para un juego local, tendrás que decidir el momento de "asignarle el control al jugador 1" y "asignarle otro mando al jugador 2". Normalmente tienes una pantalla para esto (`Lobby`).
+Para un juego local, la forma más moderna de asignar mandos es a través de una escena **Lobby** o mediante un **Modo Arcade** (amigable y directo).
 
-Cuando sepas con qué hardware quiere correr cada jugador, llama la función:
+El plugin incluye una señal universal lista para capturar Start/Enter. Puedes escuchar esto en tu menú, asignarle el Dispositivo a un número de Jugador de tu preferencia, y aplicar un Perfil Nombrado de Input:
 
 ```gdscript
-# Sintaxis: setup_player_device(player_id, device_id)
+# Conectado a la señal InputMultiDevice.player_joined_lobby
+func _on_player_joined(device_id):
+    var player_id = obtener_siguiente_libre_del_1_al_8()
 
-# Ejemplo para el Jugador 0 y Teclado principal (Device = -1)
-InputMultiDevice.setup_player_device(0, -1)
+    # 1. Emparejamos física (Hardware) con lógica (Jugador)
+    InputMultiDevice.setup_player_device(player_id, device_id)
 
-# Ejemplo para Jugador 1 y el Joypad #0 de USB/Bluetooth (Device = 0)
-InputMultiDevice.setup_player_device(1, 0)
+    # 2. Le inyectamos su perfil de botones favorito (estilo Super Smash Bros)
+    InputMultiDevice.apply_custom_profile_to_player(player_id, "DANIEL_CUSTOM")
 ```
+
+> [!TIP]
+> En la carpeta `addons/input_multi_device/scenes/` encontrarás el **Modo Arcade**, una demostración técnica `Plug & Play` incluida directamente en el plugin para que veas cómo spawnear jugadores al vuelo sin un Lobby complejo.
 
 ---
 
@@ -85,16 +90,75 @@ func _physics_process(delta):
 
 ---
 
-## 4. Opciones Avanzadas: Remapeando controles en tiempo real
+## 4. Opciones Avanzadas: Sistema CRUD de Perfiles Nombrados
 
-Si ofreces un menú de opciones donde permites al Jugador apretar su tecla deseada:
+El plugin maneja un banco de datos interno llamado `custom_profiles`. Al contrario de sobreescribir "player 1", este sistema emula el estándar actual de peleas guardando _Perfiles Personalizados_ (Strings) que los jugadores pueden intercambiarse.
 
 ```gdscript
+# 1. Crear un nuevo perfil clonando el layout de un Mando Base (Device = 0)
+InputMultiDevice.create_custom_profile("Player_Pro", 0)
+
+# 2. Escuchar un botón in-game para remapearlo en tu pantalla de Opciones
 func _input(event):
     if listening_for_input and event.is_pressed():
-        # Cambiar el ataque para el jugador 1 a la nueva tecla presionada
-        InputMultiDevice.remap_action(1, "attack", event)
+        InputMultiDevice.remap_custom_profile("Player_Pro", "attack", event)
+
+# 3. Eliminar perfiles basura
+InputMultiDevice.delete_custom_profile("Player_Pro")
 ```
 
 > [!TIP]
-> Puedes conseguir todo el diccionario de los eventos y perfiles (para pasarlos a un guardado JSON) desde el caché: `InputMultiDevice.player_profiles`
+> Recuerda usar las plantillas protegidas del motor (`Default_Mando`, `Default_Teclado_1`, `Default_Teclado_2`) como bases inmutables para recuperar controles si alguien "rompe" su perfil durante el remapeo.
+
+---
+
+## 5. Zonas Muertas (Deadzones)
+
+Por defecto, Godot aplica una zona muerta opaca de `0.5`, pero en juegos de alta precisión esto puede ser muy tosco. El plugin inyecta por defecto una `global_base_deadzone` optimizada de `0.2` a todos los ejes creados.
+Puedes brindarle un control (slider) a tus jugadores en las Opciones para ajustarlo dinámicamente:
+
+```gdscript
+InputMultiDevice.set_global_deadzone(0.15)
+```
+
+---
+
+## 6. Estados Automáticos "Toggle"
+
+Si necesitas que un botón actúe como un **interruptor** ("agacharse" vs "levantarse", "prender o apagar linterna"), en lugar de crear molestas variables internas de estado en tu personaje, delega el trabajo de rastreo al plugin usando este método en tu `_physics_process`:
+
+```gdscript
+# Cambiará entre 'true' y 'false' mágicamente cada vez que el jugador haga el "just_pressed" de la acción.
+if InputMultiDevice.is_action_toggled(mi_player_id, "crouch"):
+    print("Modo sigilo activado")
+else:
+    print("Modo normal")
+```
+
+---
+
+## 7. Vibración Enrutada (Rumble/Haptics)
+
+En Godot puro tienes que saber el Device ID del gamepad y programar condiciones `if device >= 0` por todo tu código para no crashear los teclados virtuales. El plugin enruta esto automáticamente con total seguridad; si el jugador usa teclado, la orden hace _bypass_ silencioso sin consumir recursos:
+
+```gdscript
+# Sintaxis: start_vibration(player_id, motor_debil, motor_fuerte, duracion_en_segs)
+InputMultiDevice.start_vibration(mi_player_id, 0.5, 1.0, 2.0)
+
+# Parar manualmente una vibración infinita
+InputMultiDevice.stop_vibration(mi_player_id)
+```
+
+---
+
+## 8. Guardado y Carga de Perfiles (Persistencia)
+
+Se ha integrado el script `profile_persistence.gd` diseñado para sortear la dificultad de serializar objetos `InputEvent` y transformarlos en formato encriptado de disco (CFG) a la ruta nativa y segura `user://input_profiles.cfg` sin ralentizar tu hilo principal.
+
+```gdscript
+# Simplemente llama a guardar cuando el jugador cierre el menú de mapeo de controles:
+InputMultiDevice.save_profiles()
+
+# Y llama a cargar en el _ready() de tu Juego o Menu Principal para restaurarlos:
+InputMultiDevice.load_profiles()
+```

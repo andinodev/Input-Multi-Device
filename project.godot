@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 
 SceneManager="*res://core/autoloads/scene_manager.gd"
 InputMultiDevice="*uid://de6cdxramkaip"
+GameManager="*uid://ceauqa4inp8uq"
 
 [display]
 

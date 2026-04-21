@@ -12,35 +12,21 @@ var player_colors = [
     Color(0.9, 0.8, 0.2), # Yellow
     Color(0.8, 0.2, 0.8), # Purple
     Color(0.2, 0.8, 0.8), # Cyan
+    Color(1, 1, 1), # White
+    Color(0, 0, 0), # Black
 ]
 
 func _ready():
-    # Definimos acciones estandar necesarias por InputMultiDevice (Arriba, Derecha, Abajo, Izquierda)
-    var movimientos = ["move_up", "move_right", "move_down", "move_left"]
-    
     # Inicializamos el plugin
     if has_node("/root/InputMultiDevice"):
-        # Configuramos los movimientos direccionales, pasando Numpad para el segundo teclado.
-        var numpad = [KEY_KP_8, KEY_KP_6, KEY_KP_5, KEY_KP_4]
-        InputMultiDevice.setup_movements(movimientos, [], numpad)
+        # Conectamos la señal universal del Plugin para spawnear jugadores
+        InputMultiDevice.player_joined_lobby.connect(_try_spawn_player)
         
-        # Configuramos las acciones genéricas (en nuestro caso, no tenemos botones sueltos aún)
-        InputMultiDevice.setup_actions([])
+        # Spawneamos a los que ya se unieron en el Lobby
+        for p_id in InputMultiDevice.player_to_device:
+            _try_spawn_player(InputMultiDevice.player_to_device[p_id])
     else:
         print("ERROR: AutoLoad InputMultiDevice no encontrado. Recuerda activarlo en Plugins.")
-
-func _unhandled_input(event):
-    # Si pulsamos la K (Device -1 => Teclado 1)
-    if event is InputEventKey and event.is_pressed() and not event.echo:
-        if event.physical_keycode == KEY_K:
-            _try_spawn_player(-1)
-        elif event.physical_keycode == KEY_KP_2:
-            _try_spawn_player(-3)
-
-    # Si es mando y pulsamos START
-    if event is InputEventJoypadButton and event.is_pressed():
-        if event.button_index == JOY_BUTTON_START:
-            _try_spawn_player(event.device)
 
 func _try_spawn_player(device_id: int):
     if device_id in spawned_devices:

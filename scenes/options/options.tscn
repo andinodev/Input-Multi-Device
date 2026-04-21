@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://hj88q5qpyu0v" path="res://scenes/options/options.gd" id="1_script"]
 [ext_resource type="Theme" uid="uid://bgcrdckti16d" path="res://resources/themes/default_theme.tres" id="2_theme"]
 
-[node name="Options" type="Control" unique_id=862826154]
+[node name="Options" type="Control" unique_id=381463262]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,7 +13,7 @@ grow_vertical = 2
 theme = ExtResource("2_theme")
 script = ExtResource("1_script")
 
-[node name="Background" type="ColorRect" parent="." unique_id=827550450]
+[node name="Background" type="ColorRect" parent="." unique_id=1956432204]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,78 +22,138 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.059, 0.098, 0.137, 1)
 
-[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1935748468]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1686091549]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 40
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1522537704]
+[node name="MainVBox" type="VBoxContainer" parent="MarginContainer" unique_id=163185044]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1107561093]
+[node name="TitleLabel" type="Label" parent="MarginContainer/MainVBox" unique_id=290355548]
 layout_mode = 2
 theme_type_variation = &"LabelTitleAlt"
 text = "OPCIONES"
 horizontal_alignment = 1
 
-[node name="MusicContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=1569083391]
+[node name="TabContainer" type="TabContainer" parent="MarginContainer/MainVBox" unique_id=252342988]
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+
+[node name="Sistema" type="VBoxContainer" parent="MarginContainer/MainVBox/TabContainer" unique_id=1575276324]
 layout_mode = 2
 theme_override_constants/separation = 16
+metadata/_tab_index = 0
 
-[node name="MusicLabel" type="Label" parent="CenterContainer/VBoxContainer/MusicContainer" unique_id=679990882]
+[node name="Spacer" type="Control" parent="MarginContainer/MainVBox/TabContainer/Sistema" unique_id=881145802]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="MusicContainer" type="HBoxContainer" parent="MarginContainer/MainVBox/TabContainer/Sistema" unique_id=1313795601]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="MusicLabel" type="Label" parent="MarginContainer/MainVBox/TabContainer/Sistema/MusicContainer" unique_id=1549298069]
 custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 theme_type_variation = &"LabelBody"
 text = "Volumen Música"
 
-[node name="MusicSlider" type="HSlider" parent="CenterContainer/VBoxContainer/MusicContainer" unique_id=134630615]
+[node name="MusicSlider" type="HSlider" parent="MarginContainer/MainVBox/TabContainer/Sistema/MusicContainer" unique_id=1078264080]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 value = 80.0
 
-[node name="SfxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=1054716756]
+[node name="SfxContainer" type="HBoxContainer" parent="MarginContainer/MainVBox/TabContainer/Sistema" unique_id=297231842]
 layout_mode = 2
 theme_override_constants/separation = 16
+alignment = 1
 
-[node name="SfxLabel" type="Label" parent="CenterContainer/VBoxContainer/SfxContainer" unique_id=353957527]
+[node name="SfxLabel" type="Label" parent="MarginContainer/MainVBox/TabContainer/Sistema/SfxContainer" unique_id=192630757]
 custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 theme_type_variation = &"LabelBody"
 text = "Volumen SFX"
 
-[node name="SfxSlider" type="HSlider" parent="CenterContainer/VBoxContainer/SfxContainer" unique_id=104550244]
+[node name="SfxSlider" type="HSlider" parent="MarginContainer/MainVBox/TabContainer/Sistema/SfxContainer" unique_id=501525286]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 value = 80.0
 
-[node name="FullscreenContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=1346743822]
+[node name="FullscreenContainer" type="HBoxContainer" parent="MarginContainer/MainVBox/TabContainer/Sistema" unique_id=1458621498]
 layout_mode = 2
 theme_override_constants/separation = 16
+alignment = 1
 
-[node name="FullscreenLabel" type="Label" parent="CenterContainer/VBoxContainer/FullscreenContainer" unique_id=558607221]
+[node name="FullscreenLabel" type="Label" parent="MarginContainer/MainVBox/TabContainer/Sistema/FullscreenContainer" unique_id=1762229917]
 custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 theme_type_variation = &"LabelBody"
 text = "Pantalla Completa"
 
-[node name="FullscreenToggle" type="CheckButton" parent="CenterContainer/VBoxContainer/FullscreenContainer" unique_id=821038683]
+[node name="FullscreenToggle" type="CheckButton" parent="MarginContainer/MainVBox/TabContainer/Sistema/FullscreenContainer" unique_id=501569620]
 layout_mode = 2
 
-[node name="BackSeparator" type="HSeparator" parent="CenterContainer/VBoxContainer" unique_id=1755542402]
+[node name="Controles" type="VBoxContainer" parent="MarginContainer/MainVBox/TabContainer" unique_id=451275095]
+visible = false
 layout_mode = 2
 theme_override_constants/separation = 16
+metadata/_tab_index = 1
 
-[node name="BackButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1230766939]
+[node name="Spacer2" type="Control" parent="MarginContainer/MainVBox/TabContainer/Controles" unique_id=228987687]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="TopBar" type="HBoxContainer" parent="MarginContainer/MainVBox/TabContainer/Controles" unique_id=1945473296]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="ProfileLabel" type="Label" parent="MarginContainer/MainVBox/TabContainer/Controles/TopBar" unique_id=170118071]
+layout_mode = 2
+text = "Perfil Activo:"
+
+[node name="ProfileSelector" type="OptionButton" parent="MarginContainer/MainVBox/TabContainer/Controles/TopBar" unique_id=819353436]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="BtnNewProfile" type="Button" parent="MarginContainer/MainVBox/TabContainer/Controles/TopBar" unique_id=1641331913]
+layout_mode = 2
+text = "+ Nuevo"
+
+[node name="BtnDeleteProfile" type="Button" parent="MarginContainer/MainVBox/TabContainer/Controles/TopBar" unique_id=866821199]
+layout_mode = 2
+text = "- Borrar"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/MainVBox/TabContainer/Controles" unique_id=1239032251]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ActionList" type="VBoxContainer" parent="MarginContainer/MainVBox/TabContainer/Controles/ScrollContainer" unique_id=949262142]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="CenterContainer" type="CenterContainer" parent="MarginContainer/MainVBox" unique_id=774786280]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="MarginContainer/MainVBox/CenterContainer" unique_id=274368325]
 custom_minimum_size = Vector2(280, 50)
 layout_mode = 2
 theme_type_variation = &"ButtonBack"
-text = "← VOLVER"
+text = "← VOLVER / GUARDAR"
 
-[node name="FooterLabel" type="Label" parent="." unique_id=324191502]
+[node name="FooterLabel" type="Label" parent="." unique_id=560471671]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -105,3 +165,94 @@ grow_vertical = 0
 theme_type_variation = &"LabelFooter"
 text = "Presiona ESC para volver"
 horizontal_alignment = 1
+
+[node name="KeyModal" type="ColorRect" parent="." unique_id=155546714]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.8)
+
+[node name="CenterContainer" type="CenterContainer" parent="KeyModal" unique_id=580651351]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="KeyModal/CenterContainer" unique_id=36407158]
+layout_mode = 2
+text = "Presiona la nueva tecla o botón..."
+horizontal_alignment = 1
+
+[node name="NewProfileModal" type="ColorRect" parent="." unique_id=1158679790]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.8)
+
+[node name="CenterContainer" type="CenterContainer" parent="NewProfileModal" unique_id=2068441230]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="NewProfileModal/CenterContainer" unique_id=1423025097]
+layout_mode = 2
+theme_type_variation = &"PanelContainerAlt"
+
+[node name="MarginContainer" type="MarginContainer" parent="NewProfileModal/CenterContainer/PanelContainer" unique_id=614271489]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NewProfileModal/CenterContainer/PanelContainer/MarginContainer" unique_id=1488150282]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="NewProfileModal/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=346086129]
+layout_mode = 2
+text = "CREAR NUEVO PERFIL"
+horizontal_alignment = 1
+
+[node name="NameInput" type="LineEdit" parent="NewProfileModal/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1409067454]
+layout_mode = 2
+placeholder_text = "Nombre del perfil..."
+alignment = 1
+max_length = 20
+
+[node name="BaseDeviceLabel" type="Label" parent="NewProfileModal/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=524434047]
+layout_mode = 2
+text = "Plantilla Base:"
+
+[node name="DeviceSelect" type="OptionButton" parent="NewProfileModal/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1578376949]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NewProfileModal/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=936359920]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="BtnCancel" type="Button" parent="NewProfileModal/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=382152138]
+custom_minimum_size = Vector2(150, 40)
+layout_mode = 2
+text = "Cancelar"
+
+[node name="BtnOk" type="Button" parent="NewProfileModal/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1247005968]
+custom_minimum_size = Vector2(150, 40)
+layout_mode = 2
+theme_type_variation = &"ButtonPrimary"
+text = "Aceptar"
