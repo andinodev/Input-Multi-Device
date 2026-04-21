@@ -7,7 +7,7 @@ var spawned_devices = []
 
 func _ready():
 	if has_node("/root/InputMultiDevice"):
-		InputMultiDevice.set_global_deadzone(0.1)
+		InputMultiDevice.set_global_deadzone(0.9)
 		InputMultiDevice.player_joined_lobby.connect(_on_player_joined)
 		for p_id in InputMultiDevice.player_to_device:
 			var d_id = InputMultiDevice.player_to_device[p_id]

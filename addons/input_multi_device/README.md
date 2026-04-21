@@ -14,6 +14,49 @@ En lugar de crear manualmente cientos de eventos en el `InputMap` usando sufijos
 
 ---
 
+## 🎥 Referencias de Video
+
+Puedes ver el plugin en funcionamiento en los siguientes demos técnicos:
+
+|                                                 Space Shooter                                                 |                                                 Menu Options                                                 |                                                 Platform Demo                                                 |
+| :-----------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: |
+| [![Space Shooter](https://img.youtube.com/vi/OM8Y3rDhopg/0.jpg)](https://www.youtube.com/watch?v=OM8Y3rDhopg) | [![Options Demo](https://img.youtube.com/vi/WWS-FhEtuk4/0.jpg)](https://www.youtube.com/watch?v=WWS-FhEtuk4) | [![Platform Demo](https://img.youtube.com/vi/nqTrlHFIsfU/0.jpg)](https://www.youtube.com/watch?v=nqTrlHFIsfU) |
+|                         [Ver en YouTube](https://www.youtube.com/watch?v=OM8Y3rDhopg)                         |                        [Ver en YouTube](https://www.youtube.com/watch?v=WWS-FhEtuk4)                         |                         [Ver en YouTube](https://www.youtube.com/watch?v=nqTrlHFIsfU)                         |
+
+---
+
+## ⚖️ Ventajass
+
+¿Por qué usar este plugin en lugar de programar la entrada manualmente o usar otras alternativas?
+
+### 1. vs. Implementación Nativa (Manual en Godot)
+
+- **Escalabilidad sin "InputMap Bloat"**: En lugar de ensuciar el `InputMap` con cientos de entradas (`p0_jump`, `p1_jump`, `p2_jump`...), el plugin orquesta estas acciones dinámicamente por código.
+- **Aislamiento de Teclado Real**: Godot nativo mezcla todos los teclados conectados. Este plugin permite separar físicamente el teclado en dos dispositivos virtuales independientes para multijugador local en una misma máquina sin interferencias.
+- **Gameplay Agnóstico**: Tu código de movimiento es idéntico (`InputMultiDevice.get_vector`) sin importar si el jugador usa un DualSense, un mando de Xbox o la mitad de un teclado.
+
+### 2. vs. Otros Plugins de Input
+
+- **Arquitectura Orientada a Perfiles (CRUD)**: A diferencia de otros plugins que solo detectan mandos, este incluye un backend completo para crear, remapear, eliminar y persistir perfiles con nombre (estilo juegos de pelea profesionales).
+- **Ligero y Extensible**: No intenta ser un framework visual pesado. Es un Singleton lógico que puedes conectar a cualquier UI de Lobby o Menú de Opciones en minutos.
+- **Vibración Optimizada**: Enruta el "Rumble" automáticamente al dispositivo correcto y hace _bypass_ silencioso en teclados, evitando excepciones comunes de "Invalid Device ID".
+
+---
+
+## 🚀 Funcionalidades
+
+Este plugin abarca todo el ciclo de vida del input en un juego multijugador local:
+
+- **Detección Plug & Play**: Identificación automática de hardware (Mandos de Xbox, PlayStation, Switch y Teclados) al conectarse, sin reiniciar el juego.
+- **Unión Universal (Lobby System)**: Sistema listo para usar que detecta cuándo un jugador quiere unirse a la partida mediante un botón universal (`Start` o `Enter`).
+- **API Híbrida Simplificada**: Permite programar el movimiento y las acciones una sola vez. El plugin traduce automáticamente si el jugador está usando la mitad de un teclado o un mando profesional.
+- **Gestión de Perfiles Nombrados**: Los jugadores pueden crear, editar y guardar sus propios esquemas de controles (ej. "Perfil_Competitivo") que se mantienen guardados en el PC.
+- **Vibración Independiente y Segura**: Envía efectos de vibración ("Rumble") únicamente al mando del jugador que realiza la acción, evitando crasheos o interferencias en otros dispositivos o teclados.
+- **Soporte de Doble Teclado**: Permite que dos personas jueguen en un mismo teclado físico (uno con WASD y otro con las Flechas/Numpad) detectándolos como jugadores independientes. En Godot nativo, esto es extremadamente complejo de separar.
+- **Componentes de Prototipado Rápido**: Incluye escenas listas para usar, como el "Modo Arcade", que permiten spawnear jugadores y probar tu gameplay en segundos.
+
+---
+
 ## 1. Configuración Inicial (El "Setup")
 
 Dicha configuración solo necesitas mandarla a llamar **1 sola vez** al momento en el que inicie tu juego (`_ready` del `Main` o del `Lobby`).
@@ -35,9 +78,8 @@ func _ready():
 
     # 4. Inicializamos Movimientos y Acciones por separado
     if has_node("/root/InputMultiDevice"):
-        var imd = get_node("/root/InputMultiDevice")
-        imd.setup_movements(movimientos, [], defaults_mov_teclado2)
-        imd.setup_actions(acciones, defaults_act_teclado1, [], defaults_act_mando)
+        InputMultiDevice.setup_movements(movimientos, [], defaults_mov_teclado2)
+        InputMultiDevice.setup_actions(acciones, defaults_act_teclado1, [], defaults_act_mando)
 ```
 
 > [!NOTE]

@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://dp6m5q8w2y7v"]
+[gd_scene format=3 uid="uid://dp6m5q8w2y7v"]
 
-[ext_resource type="Script" uid="uid://c3v5n6r7p8q9" path="res://scenes/lobby/lobby.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://cqokrfwq7yvep" path="res://addons/input_multi_device/scenes/lobby/lobby.gd" id="2_ori1i"]
 [ext_resource type="Theme" uid="uid://bgcrdckti16d" path="res://resources/themes/default_theme.tres" id="2_theme"]
 
-[node name="Lobby" type="Control"]
+[node name="Lobby" type="Control" unique_id=685456384]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,9 +11,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("2_theme")
-script = ExtResource("1_script")
+script = ExtResource("2_ori1i")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=154293536]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,7 +22,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0588235, 0.0980392, 0.137255, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=814323969]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -34,41 +34,41 @@ theme_override_constants/margin_top = 40
 theme_override_constants/margin_right = 40
 theme_override_constants/margin_bottom = 40
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=2136647974]
 layout_mode = 2
 theme_override_constants/separation = 30
 
-[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer" unique_id=737820434]
 layout_mode = 2
 theme_type_variation = &"LabelTitleAlt"
 text = "SALON DE ESPERA (LOBBY)"
 horizontal_alignment = 1
 
-[node name="Instructions" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="Instructions" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1936406162]
 layout_mode = 2
 theme_type_variation = &"LabelBody"
 text = "Presiona START en tu mando o ENTER en tu teclado para unirte"
 horizontal_alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer" unique_id=688017868]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
 columns = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=571661157]
 layout_mode = 2
-alignment = 1
 theme_override_constants/separation = 40
+alignment = 1
 
-[node name="BackButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="BackButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1581588035]
 custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 theme_type_variation = &"ButtonSecondary"
 text = "VOLVER"
 
-[node name="PlayButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="PlayButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1811413392]
 custom_minimum_size = Vector2(250, 50)
 layout_mode = 2
 theme_type_variation = &"ButtonPrimary"

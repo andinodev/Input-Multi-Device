@@ -12,14 +12,14 @@ config_version=5
 
 config/name="Base Prototype"
 config/description="Plantilla educativa con SceneManager, máquina de estados, transiciones y breadcrumb de escenas."
-run/main_scene="res://scenes/main_menu/main_menu.tscn"
+run/main_scene="uid://ih84d67cwdkj"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-SceneManager="*res://core/autoloads/scene_manager.gd"
 InputMultiDevice="*uid://de6cdxramkaip"
+SceneManager="*res://core/autoloads/scene_manager.gd"
 GameManager="*uid://ceauqa4inp8uq"
 PhantomCameraManager="*uid://duq6jhf6unyis"
 

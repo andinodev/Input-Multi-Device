@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bamycpj16vrrj"]
 
-[ext_resource type="Script" uid="uid://hj88q5qpyu0v" path="res://scenes/options/options.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://hj88q5qpyu0v" path="res://addons/input_multi_device/scenes/options/options.gd" id="1_script"]
 [ext_resource type="Theme" uid="uid://bgcrdckti16d" path="res://resources/themes/default_theme.tres" id="2_theme"]
 
 [node name="Options" type="Control" unique_id=381463262]

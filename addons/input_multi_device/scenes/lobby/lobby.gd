@@ -133,7 +133,14 @@ func _on_play_pressed() -> void:
 		# Maybe show a warning "Al menos 1 jugador"?
 		print("No hay jugadores unidos")
 		return
-	SceneManager.change_scene(DEMO_LEVEL)
+	
+	var next_scene = DEMO_LEVEL
+	if GameManager.target_game_scene != "":
+		next_scene = GameManager.target_game_scene
+		# Clear it so it doesn't persist if we return from another entry point
+		GameManager.target_game_scene = ""
+		
+	SceneManager.change_scene(next_scene)
 
 func _on_back_pressed() -> void:
 	SceneManager.go_back()
