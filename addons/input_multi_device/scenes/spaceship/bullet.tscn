@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://dm6m2raw30av"]
+
+[ext_resource type="Script" uid="uid://b0sgloiurm2hd" path="res://addons/input_multi_device/scenes/spaceship/bullet.gd" id="1_script"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(6, 24)
+
+[node name="Bullet" type="Area2D" unique_id=457218283]
+rotation = 1.5707964
+script = ExtResource("1_script")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1559701079]
+offset_left = -3.0
+offset_top = -12.0
+offset_right = 3.0
+offset_bottom = 12.0
+color = Color(1, 0.8, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=987642712]
+shape = SubResource("RectangleShape2D_1")

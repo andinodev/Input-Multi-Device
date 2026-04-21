@@ -1,8 +1,8 @@
-[gd_scene format=3 uid="uid://dm6m2raw3y8v"]
+[gd_scene format=3 uid="uid://ih84d67cwdkj"]
 
-[ext_resource type="Script" path="res://addons/input_multi_device/scenes/arcade_launcher.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://bx00mcvoqh7ms" path="res://addons/input_multi_device/scenes/arcade_launcher.gd" id="1_script"]
 
-[node name="ArcadeLauncher" type="Control"]
+[node name="ArcadeLauncher" type="Control" unique_id=1727137883]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=956796093]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,7 +20,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1630799788]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -28,17 +28,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=408596586]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Title" type="Label" parent="CenterContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1365712171]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
 text = "MODO ARCADE"
 horizontal_alignment = 1
 
-[node name="Instructions" type="Label" parent="CenterContainer/VBoxContainer"]
+[node name="Instructions" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1708326331]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Presiona START o ENTER para entrar a la arena"

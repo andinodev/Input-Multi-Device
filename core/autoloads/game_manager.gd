@@ -9,7 +9,7 @@ func _ready() -> void:
     InputMultiDevice.setup_movements(movements, [], numpad)
     
     # Configuramos las acciones genéricas. Añadiremos "crouch" para probar el Toggle
-    InputMultiDevice.setup_actions(["crouch"], [KEY_SPACE], [KEY_KP_ENTER])
+    InputMultiDevice.setup_actions(["crouch", "shoot"], [KEY_SPACE, KEY_SPACE], [KEY_KP_ENTER, KEY_KP_ENTER], [JOY_BUTTON_B, JOY_BUTTON_RIGHT_SHOULDER])
     
     # Inmediatamente cargamos lo que el usuario guardó en el menú de opciones (Persistence)
     InputMultiDevice.load_profiles()

@@ -21,6 +21,7 @@ config/icon="res://icon.svg"
 SceneManager="*res://core/autoloads/scene_manager.gd"
 InputMultiDevice="*uid://de6cdxramkaip"
 GameManager="*uid://ceauqa4inp8uq"
+PhantomCameraManager="*uid://duq6jhf6unyis"
 
 [display]
 
@@ -31,7 +32,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/input_multi_device/plugin.cfg")
+enabled=PackedStringArray("res://addons/input_multi_device/plugin.cfg", "res://addons/phantom_camera/plugin.cfg")
 
 [input]
 
